@@ -1,0 +1,51 @@
+{
+  "_nota": "Diccionario de datos: una entrada por cada columna que de verdad existe en lago/clean/. scripts/verify.py comprueba que coincida con los archivos y scripts/make_excel.py lo vuelca al Excel.",
+  "files": {
+    "F01_homicidios_comuna.csv": {
+      "source": "F01",
+      "fields": [
+        {"name": "comuna_id", "original": "Comuna", "means": "Número de la comuna (1 a 22), sacado del texto «Comuna N»; vacío para filas que no son comunas (p. ej. zona rural)", "type": "Entero", "unit": "N/A", "example": "3", "nullable": "Sí", "range": "1–22", "class": "Pública", "transform": "Se extrae el número del texto; se descarta la fila de totales para no contar dos veces", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"},
+        {"name": "comuna", "original": "Comuna", "means": "Nombre de la zona tal como la publica la fuente", "type": "Texto", "unit": "N/A", "example": "Comuna 3", "nullable": "No", "range": "Comuna 1…Comuna 22 y otras zonas", "class": "Pública", "transform": "Se limpian espacios", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"},
+        {"name": "anio", "original": "Total AAAA (nombre de la columna)", "means": "Año al que corresponde el conteo", "type": "Entero", "unit": "año", "example": "2021", "nullable": "No", "range": "1993–2021", "class": "Pública", "transform": "La fuente trae un campo por año; se pasa a formato largo (una fila por comuna y año)", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"},
+        {"name": "homicidios", "original": "Total AAAA", "means": "Número total de homicidios de ese año en esa comuna (hombres y mujeres sumados)", "type": "Entero", "unit": "casos", "example": "87", "nullable": "No", "range": "≥ 0", "class": "Pública", "transform": "Se usa la columna «Total AAAA»; los valores «ND» se descartan", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"}
+      ]
+    },
+    "F03_ica_estaciones.csv": {
+      "source": "F03",
+      "fields": [
+        {"name": "fecha", "original": "Fecha", "means": "Primer día del mes al que corresponde la medición", "type": "Fecha", "unit": "N/A", "example": "2015-06-01", "nullable": "No", "range": "2010-01-01 a 2020-12-01", "class": "Pública", "transform": "Se recorta la hora (AAAA-MM-DDT00:00:00 → AAAA-MM-DD)", "question": "¿Qué estación de monitoreo registra peor calidad del aire mes a mes?"},
+        {"name": "estacion", "original": "Nombre de cada columna de estación", "means": "Estación de monitoreo del DAGMA que reporta el índice", "type": "Texto", "unit": "N/A", "example": "Cañaveralejo", "nullable": "No", "range": "9 estaciones (ERA - Obrero, La Flora, Pance, Univalle, Base Aerea, Compartir, La Ermita, Cañaveralejo, Transitoria)", "class": "Pública", "transform": "Se pasa de formato ancho (una columna por estación) a largo", "question": "¿Qué estación de monitoreo registra peor calidad del aire mes a mes?"},
+        {"name": "ica", "original": "Valor de cada estación", "means": "Índice de Calidad del Aire de esa estación ese mes (más alto = peor aire)", "type": "Decimal", "unit": "índice ICA (0–500)", "example": "62", "nullable": "No", "range": "0–500", "class": "Pública", "transform": "El texto «ND» (sin dato) se descarta; no se rellena ni se estima. La cobertura se informa en la vista", "question": "¿Qué estación de monitoreo registra peor calidad del aire mes a mes?"}
+      ]
+    },
+    "F04_programas_etdh.csv": {
+      "source": "F04",
+      "fields": [
+        {"name": "codigo_institucion", "original": "codigo_institucion", "means": "Código de la institución en la Secretaría de Educación", "type": "Código", "unit": "N/A", "example": "3271", "nullable": "No", "range": "Código numérico", "class": "Pública", "transform": "Ninguna", "question": "¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?"},
+        {"name": "institucion", "original": "nombre_institucion", "means": "Nombre de la institución (persona jurídica) que ofrece el programa", "type": "Texto", "unit": "N/A", "example": "aaa academia fast english usa", "nullable": "No", "range": "Texto libre", "class": "Pública", "transform": "Minúsculas y espacios limpios", "question": "¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?"},
+        {"name": "codigo_programa", "original": "codigo_programa", "means": "Código del programa", "type": "Código", "unit": "N/A", "example": "6925", "nullable": "No", "range": "Código numérico", "class": "Pública", "transform": "Ninguna", "question": "¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?"},
+        {"name": "programa", "original": "nombre_programa", "means": "Nombre del programa o curso", "type": "Texto", "unit": "N/A", "example": "avanzado nivel c2", "nullable": "No", "range": "Texto libre", "class": "Pública", "transform": "Minúsculas y espacios limpios", "question": "¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?"},
+        {"name": "tipo_certificado", "original": "tipo_certificado", "means": "Tipo de certificado que entrega el programa", "type": "Texto", "unit": "N/A", "example": "Certificado de conocimiento académico", "nullable": "Sí", "range": "Texto libre", "class": "Pública", "transform": "Espacios limpios", "question": "¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?"},
+        {"name": "jornadas", "original": "jornada_1, jornada_2, jornada_3", "means": "Jornadas en que se dicta el programa, separadas por «;»", "type": "Texto", "unit": "N/A", "example": "diurna;nocturna", "nullable": "Sí", "range": "diurna, nocturna, fin de semana (según la fuente)", "class": "Pública", "transform": "Se unen las tres columnas en una lista sin repetidos", "question": "¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?"}
+      ]
+    },
+    "F09_poblacion_censos.csv": {
+      "source": "F09",
+      "fields": [
+        {"name": "anio_censo", "original": "Año", "means": "Año en que se hizo el censo", "type": "Entero", "unit": "año", "example": "1964", "nullable": "No", "range": "1912–2005", "class": "Pública", "transform": "Ninguna", "question": "¿Cómo ha crecido la población de Cali?"},
+        {"name": "poblacion_total", "original": "Población total", "means": "Habitantes censados en el municipio", "type": "Entero", "unit": "habitantes", "example": "637929", "nullable": "No", "range": "≥ 10 000", "class": "Pública", "transform": "La fuente usa punto de miles (637.929) y el datastore lo entrega como 637.929 numérico; se convierte a 637929. verify.py exige que crezca censo a censo", "question": "¿Cómo ha crecido la población de Cali?"},
+        {"name": "poblacion_cabecera", "original": "Población cabecera", "means": "Habitantes en la zona urbana (cabecera)", "type": "Entero", "unit": "habitantes", "example": "618215", "nullable": "Sí", "range": "≥ 0", "class": "Pública", "transform": "Misma conversión de miles; «ND» queda vacío", "question": "¿Cómo ha crecido la población de Cali?"},
+        {"name": "poblacion_resto", "original": "Población resto", "means": "Habitantes en la zona rural (resto)", "type": "Entero", "unit": "habitantes", "example": "19714", "nullable": "Sí", "range": "≥ 0", "class": "Pública", "transform": "Misma conversión de miles; «ND» queda vacío", "question": "¿Cómo ha crecido la población de Cali?"},
+        {"name": "pct_cabecera", "original": "% Cabecera", "means": "Porcentaje de la población que vive en la cabecera urbana", "type": "Decimal", "unit": "%", "example": "96.9", "nullable": "Sí", "range": "0–100", "class": "Pública", "transform": "Se quita el símbolo «%» y se pasa a número", "question": "¿Cómo ha crecido la población de Cali?"}
+      ]
+    },
+    "comunas.geojson": {
+      "source": "F11",
+      "fields": [
+        {"name": "comuna_id", "original": "propiedad que identifica la comuna (se detecta; ver manifest.campo_comuna)", "means": "Número de la comuna (1 a 22), clave para unir con F01", "type": "Entero", "unit": "N/A", "example": "3", "nullable": "No", "range": "1–22", "class": "Pública", "transform": "Se extrae el número de la propiedad detectada", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"},
+        {"name": "nombre", "original": "(construido)", "means": "Nombre «Comuna N» construido a partir del número", "type": "Texto", "unit": "N/A", "example": "Comuna 3", "nullable": "No", "range": "Comuna 1…Comuna 22", "class": "Pública", "transform": "Construido por el script", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"},
+        {"name": "geometry", "original": "geometry / the_geom", "means": "Polígono de la comuna en WGS84", "type": "Coordenada / geometría", "unit": "grados (EPSG:4326)", "example": "Polygon / MultiPolygon", "nullable": "No", "range": "Cali ≈ lon -76.6…-76.4, lat 3.3…3.55", "class": "Pública", "transform": "Se redondea a 5 decimales (≈1 m) para aligerar el archivo", "question": "¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2021?"}
+      ]
+    }
+  }
+}

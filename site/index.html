@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cali en datos</title>
+<meta name="description" content="Sistema de información de Cali: homicidios por comuna, calidad del aire, educación para el trabajo y población, con la fuente de cada cifra.">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Cali en datos</h1>
+    <p class="sub">Seguridad, aire, educación y población de Santiago de Cali, con la fuente de cada cifra a un clic.</p>
+    <p class="group" id="group"></p>
+  </header>
+
+  <div id="banner" class="banner hidden" role="status"></div>
+
+  <section class="card" id="preguntas">
+    <h2>Qué preguntas responde este sistema</h2>
+    <ul class="qlist" id="qlist"></ul>
+  </section>
+
+  <section class="card" id="seguridad">
+    <div class="head">
+      <h2>Homicidios por comuna</h2>
+      <span id="src-F01"></span>
+      <p>¿Qué comunas concentran más homicidios y cómo cambió entre 1993 y 2018? Conteos por comuna y año; no hay datos de personas.</p>
+    </div>
+    <div id="seguridad-body"></div>
+  </section>
+
+  <section class="card" id="aire">
+    <div class="head">
+      <h2>Calidad del aire por estación</h2>
+      <span id="src-F03"></span>
+      <p>¿Qué estación de monitoreo registra peor calidad del aire mes a mes? Índice ICA: más alto es peor aire.</p>
+    </div>
+    <div id="aire-body"></div>
+  </section>
+
+  <section class="card" id="educacion">
+    <div class="head">
+      <h2>Educación para el trabajo</h2>
+      <span id="src-F04"></span>
+      <p>¿Qué instituciones ofrecen más programas de educación para el trabajo y en qué jornada?</p>
+    </div>
+    <div id="educacion-body"></div>
+  </section>
+
+  <section class="card" id="poblacion">
+    <div class="head">
+      <h2>Población censada (histórica)</h2>
+      <span id="src-F09"></span>
+      <p>¿Cómo ha crecido la población de Cali? Solo censos antiguos: no es la población de hoy.</p>
+    </div>
+    <div id="poblacion-body"></div>
+  </section>
+
+  <section class="card" id="limites">
+    <h2>Lo que no se muestra y lo que queda pendiente</h2>
+    <ul class="plain">
+      <li><b>Personas en riesgo.</b> No se publican los datos de líderes sociales amenazados ni de posibles víctimas de trata, ni siquiera agregados por zona: con pocos casos por comuna, un conteo puede señalar a alguien.</li>
+      <li><b>Tasas por habitante.</b> Pendiente: falta una fuente abierta de población actual por comuna. Por eso los homicidios se muestran como conteos, no como tasas, y las comunas más pobladas pueden verse peor solo por su tamaño.</li>
+      <li><b>Movilidad (MIO).</b> Pendiente: no se encontró un archivo oficial de rutas y horarios que se pudiera probar.</li>
+      <li><b>Datos simulados o aproximados (PROXY).</b> Este sistema no usa ninguno. Si alguna vez aparece uno, se marca como tal en la cifra.</li>
+    </ul>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<dialog id="srcdialog" aria-labelledby="srctitle">
+  <h2 id="srctitle"></h2>
+  <dl id="srcbody"></dl>
+  <button class="close" id="srcclose">Cerrar</button>
+</dialog>
+<div id="tip" role="tooltip"></div>
+
+<script src="vendor/maplibre-gl.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

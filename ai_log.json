@@ -1,0 +1,128 @@
+[
+ {
+  "tool": "Claude",
+  "task": "Encontrar el portal oficial de datos abiertos de Cali para arrancar el rastreo",
+  "answer": "Propuso datos.cali.gov.co (portal CKAN de la Alcaldía) y datos.gov.co (portal nacional)",
+  "check": "Se abrió datos.cali.gov.co con su API (/api/3/action/package_search); datos.gov.co no se pudo revisar a fondo porque su robots.txt bloqueó el acceso automático",
+  "result": "Parcial",
+  "ids": "",
+  "learned": "Que «proponer un portal» no es comprobar que cada conjunto responde; hay que probar cada fuente por separado."
+ },
+ {
+  "tool": "Claude",
+  "task": "Buscar una fuente real sobre homicidios por comuna en Cali",
+  "answer": "Encontró «Homicidio según tipo sexo por año y comuna 1993-2021» de la Secretaría de Seguridad y Justicia",
+  "check": "Se llamó a datastore_search de la API del portal y llegaron las filas por comuna con cifras reales (ej. Comuna 1 = 987 casos acumulados)",
+  "result": "Correcto",
+  "ids": "F01",
+  "learned": "Conviene usar la API de datos (datastore_search) y no confiar solo en el título del conjunto."
+ },
+ {
+  "tool": "Claude",
+  "task": "Replicar para Cali el ejemplo de la fila gris (vistas de Wikipedia de Medellín)",
+  "answer": "Propuso la misma URL de la API de Wikimedia cambiando «Medellín» por «Cali»",
+  "check": "Se intentó abrir la URL y la herramienta de verificación respondió que el dominio era «solo caché»; nunca llegó un dato",
+  "result": "Incorrecto",
+  "ids": "F08 (no entró al lago; ver README)",
+  "learned": "Una fuente que funciona para otra ciudad no queda probada para la nuestra; si no respondió, no se declara integrada."
+ },
+ {
+  "tool": "Claude",
+  "task": "Buscar datos abiertos en formato GTFS del sistema de transporte masivo MIO",
+  "answer": "Aseguró que debía existir un feed GTFS público del MIO, como en otras ciudades colombianas",
+  "check": "Se buscó el enlace de descarga oficial y solo aparecieron noticias, un observatorio y un repositorio de un tercero no oficial",
+  "result": "Inventado",
+  "ids": "F10 (no entró al lago; ver README)",
+  "learned": "La IA puede dar por hecho que «debe existir» un dato solo porque es común en otras ciudades; hay que exigir el enlace exacto y probarlo."
+ },
+ {
+  "tool": "Claude",
+  "task": "Revisar si los conjuntos de «líderes sociales amenazados» y «trata de personas» traen datos que identifiquen a alguien",
+  "answer": "Advirtió que, aunque el portal los declara públicos, cruzar nombre + barrio + fecha de la amenaza puede poner en riesgo a alguien",
+  "check": "Se leyó la ficha de metadatos sin abrir el archivo completo, por precaución",
+  "result": "Parcial",
+  "ids": "F05, F06 (no entraron; ver README)",
+  "learned": "«Público» en el portal no significa «seguro de publicar sin cambios»."
+ },
+ {
+  "tool": "Claude",
+  "task": "Conseguir la población actual de Cali para poder calcular tasas",
+  "answer": "Encontró «Población total censada en Cali por área»",
+  "check": "Al revisar los registros reales con datastore_search, la serie llega solo hasta un censo antiguo; no hay cifra reciente ni proyección",
+  "result": "Parcial",
+  "ids": "F09",
+  "learned": "Hay que revisar el rango de fechas real de los datos y no solo el nombre del conjunto."
+ },
+ {
+  "tool": "Claude",
+  "task": "Confirmar que las páginas de cada conjunto y sus descargas directas abrían bien",
+  "answer": "Indicó que debían abrir sin problema por ser un portal público",
+  "check": "Al abrir la página del conjunto y el CSV directo con una herramienta automática, varias veces devolvió error 403, mientras que la ruta /api/3/action/ sí respondió",
+  "result": "Parcial",
+  "ids": "F01, F03, F04, F09",
+  "learned": "Un portal puede bloquear herramientas automáticas en sus páginas normales aunque su API esté abierta; por eso la ingesta usa la API y deja el CSV directo como respaldo."
+ },
+ {
+  "tool": "Claude",
+  "task": "Escribir los scripts de ingesta, la verificación y las pruebas del lago",
+  "answer": "Entregó ingest.py, verify.py, build_site_data.py y 10 pruebas automáticas",
+  "check": "Se corrieron las 10 pruebas con datos SINTÉTICOS (sin red). Desde el entorno donde se escribió no se pudo llegar al portal, así que no se probó contra datos reales",
+  "result": "Parcial",
+  "ids": "F01, F03, F04, F09",
+  "learned": "Que las pruebas pasen con datos inventados no prueba que la fuente real responda; la primera corrida real (python scripts/run_all.py) es la prueba de verdad y fija la fecha de prueba."
+ },
+ {
+  "tool": "Claude",
+  "task": "Conseguir los polígonos de las comunas para el mapa",
+  "answer": "Propuso exportar el conjunto «Comunas de Santiago de Cali» del portal nacional (datos.gov.co, código dx2g-2mhm) como GeoJSON, con dos URL de exportación",
+  "check": "El conjunto existe en el buscador, pero no se pudo abrir ni su ficha ni sus URL de exportación; no se sabe si el GeoJSON está en WGS84 ni cómo se llama la propiedad de la comuna. El script prueba varias URL y deja constancia de cuál respondió",
+  "result": "Parcial",
+  "ids": "F11",
+  "learned": "Que el nombre de un conjunto exista no prueba que su URL de exportación y sus campos sean los que uno supone. Si ninguna URL responde, se puede fijar la correcta con la variable COMUNAS_GEOJSON_URL."
+ },
+ {
+  "tool": "Claude",
+  "task": "Interpretar la población del datastore (valores como 27.747 y 637.929)",
+  "answer": "Supuso que el punto es separador de miles (27.747 = 27 747 habitantes) y lo convirtió",
+  "check": "Es una inferencia: coincide con el orden de magnitud de un censo de 1912 y de 1964, pero no se vio el archivo original. verify.py exige que la población crezca censo a censo y sea ≥ 10 000",
+  "result": "Parcial",
+  "ids": "F09",
+  "learned": "Una conversión de unidades inferida se deja con una verificación que la delate si estaba mal."
+ },
+ {
+  "tool": "Claude",
+  "task": "Revisar el sitio en una pantalla de teléfono simulada (390 px)",
+  "answer": "Entregó una primera versión del sitio",
+  "check": "Al abrirla con un navegador de prueba: el texto de la gráfica del aire era ilegible (se dibujaba a 640 px y se encogía) y los nombres con acento salían mal («SintÉtico»). Además, una captura de página completa mostró el mapa cortado, pero al medir los límites del mapa con la ventana normal era un artefacto de la captura",
+  "result": "Parcial",
+  "ids": "F03, F04, F01",
+  "learned": "«Funciona» no es «se ve bien»: hay que mirarlo en una pantalla de teléfono, y desconfiar también de la herramienta con la que se mira."
+ },
+ {
+  "tool": "Claude",
+  "task": "Armar el mismo mapa por comuna en una segunda herramienta (Streamlit + Plotly) con los mismos datos de prueba",
+  "answer": "Escribió 9 líneas de Python; el servidor arrancó (HTTP 200)",
+  "check": "Al abrirlo a 390 px dibujó los controles y la barra de color pero no los polígonos; la red del entorno bloqueó cdn.plot.ly, de donde Plotly baja archivos de base para sus mapas. No se sabe si en una red normal los dibuja",
+  "result": "Parcial",
+  "ids": "F01",
+  "learned": "Una herramienta puede depender de un servidor externo que uno no ve en el código; hay que mirar qué pide la red cuando se abre."
+ },
+ {
+  "tool": "Claude",
+  "task": "Explicar por qué la primera corrida real de scripts/run_all.py dio HTTP 403 en las cuatro fuentes de datos.cali.gov.co",
+  "answer": "Supuso que el portal rechazaba al script por no parecer un navegador y cambió el User-Agent",
+  "check": "El grupo abrió el portal en el navegador y mostró un «Comunicado oficial» de la Alcaldía del 21 de octubre de 2026: servicios web suspendidos temporalmente por medidas de seguridad. La causa era esa, no el User-Agent",
+  "result": "Incorrecto",
+  "ids": "F01, F03, F04, F09",
+  "learned": "Antes de cambiar el código hay que mirar la fuente con los propios ojos; una hipótesis plausible no es un diagnóstico. Las pruebas de septiembre (API respondió el 2026-09-28) siguen siendo válidas con esa fecha, pero hoy no se puede repetir la prueba."
+ },
+ {
+  "tool": "Claude",
+  "task": "Armar un plan B para el sistema mientras el portal de la Alcaldía siga caído",
+  "answer": "Propuso usar las copias que el grupo descargó y limpió el 2026-10-06, convertirlas al formato del lago con un script y rotularlas como copia local",
+  "check": "Se corrió la conversión con los 4 archivos reales: F01 pasó de 624 a 588 comuna-año (36 con un sexo vacío), F03 quedó sin los 59 ceros y F04 y F09 conservaron sus 2.427 y 9 filas. Se abrió el sitio en pantalla de teléfono y de escritorio con esos datos. No se probó aún la publicación en GitHub Actions ni la descarga real",
+  "result": "Parcial",
+  "ids": "F01, F03, F04, F09",
+  "learned": "Una copia propia permite seguir, pero hay que decirlo en cada ficha: la fecha de prueba es la de la descarga original, no la de hoy."
+ }
+]

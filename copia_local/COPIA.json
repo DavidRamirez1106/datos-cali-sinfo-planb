@@ -1,0 +1,11 @@
+{
+  "descargada_el": "2026-10-06",
+  "motivo": "Desde el 21 de octubre de 2026 el portal datos.cali.gov.co muestra un comunicado oficial de suspensión de servicios web. Estas son las copias que el grupo descargó a mano el 6 de octubre de 2026 y limpió para la primera entrega.",
+  "licencias_nota": "Licencia copiada tal como la registró el grupo en el Excel de la primera entrega (hoja «1. Fuentes», columna Licencia).",
+  "fuentes": {
+    "F01": {"archivo": "homicidios_comuna_1993_2021.csv", "licencia": "Creative Commons Attribution"},
+    "F03": {"archivo": "calidad_aire_ica.csv", "licencia": "Creative Commons Attribution Share-Alike"},
+    "F04": {"archivo": "programas_etdh.csv", "licencia": "Creative Commons Attribution Share-Alike"},
+    "F09": {"archivo": "poblacion_censada_historica.csv", "licencia": "Creative Commons Attribution"}
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "_nota": "Catálogo de fuentes. 'integrated' = entra al lago por scripts/ingest.py. La licencia y la vigencia NO se escriben aquí: ingest.py las copia tal cual de la API del portal (package_show) en cada corrida y las deja en lago/manifest.json.",
+  "portal": "https://datos.cali.gov.co",
+  "sources": [
+    {
+      "id": "F01",
+      "kind": "ckan_datastore",
+      "package": "homicidio-segun-tipo-sexo-por-ano-y-comuna-1993-2021",
+      "resource_id": "17d369c4-6ba0-4b77-b7e7-d034f70d6f97",
+      "csv_fallback": "https://datos.cali.gov.co/dataset/3cc7f6d8-b047-4605-a6e6-ae0ee1fe26e6/resource/17d369c4-6ba0-4b77-b7e7-d034f70d6f97/download/hacs_.csv",
+      "name": "Homicidios según sexo de la víctima, por año y comuna (1993–2021)",
+      "entity": "Secretaría de Seguridad y Justicia (Alcaldía de Santiago de Cali)",
+      "periodo": "1993–2021",
+      "clean_file": "F01_homicidios_comuna.csv",
+      "integrated": true
+    },
+    {
+      "id": "F03",
+      "kind": "ckan_datastore",
+      "package": "indice-de-calidad-del-aire-ica-de-santiago-de-cali",
+      "resource_id": "b247bee0-596c-4515-bdd4-2ebdf6542caf",
+      "csv_fallback": "https://datos.cali.gov.co/dataset/77ae33fb-4987-4d43-879a-c31a1b99b94d/resource/b247bee0-596c-4515-bdd4-2ebdf6542caf/download/formato-oa-para-el-icaactualizado092020.csv",
+      "name": "Índice de Calidad del Aire (ICA) por estación, serie mensual",
+      "entity": "DAGMA – Departamento Administrativo de Gestión del Medio Ambiente",
+      "periodo": "2010–2020",
+      "clean_file": "F03_ica_estaciones.csv",
+      "integrated": true
+    },
+    {
+      "id": "F04",
+      "kind": "ckan_datastore",
+      "package": "programas-de-educacion-para-el-trabajo-y-desarrollo-humano",
+      "resource_id": "d3d5d6ef-170e-408f-b3eb-9c6fa1570254",
+      "csv_fallback": "https://datos.cali.gov.co/dataset/650e1f77-0f3d-4f88-bca8-e891dfbc4820/resource/d3d5d6ef-170e-408f-b3eb-9c6fa1570254/download/programas_etdh_2026.csv",
+      "name": "Programas de Educación para el Trabajo y Desarrollo Humano (ETDH)",
+      "entity": "Secretaría de Educación de Santiago de Cali",
+      "periodo": "2026 (corte vigente)",
+      "clean_file": "F04_programas_etdh.csv",
+      "integrated": true
+    },
+    {
+      "id": "F09",
+      "kind": "ckan_datastore",
+      "package": "poblacion-total-censada-en-cali-por-area-segun-fecha-de-realizacion",
+      "resource_id": "0fcd7b53-11a5-437b-8fbb-ce5d0d4324ea",
+      "csv_fallback": "https://datos.cali.gov.co/dataset/4a76cbdb-7698-45a7-b9e8-d20e4468e112/resource/0fcd7b53-11a5-437b-8fbb-ce5d0d4324ea/download/poblaci_n_total_censada_en_cali__por__rea__seg_n_fecha_de_realizaci_n.csv",
+      "name": "Población total censada en Cali, por área, según fecha de censo",
+      "entity": "Departamento Administrativo de Planeación Municipal (cifras base DANE)",
+      "periodo": "1912–2005",
+      "clean_file": "F09_poblacion_censos.csv",
+      "integrated": true
+    },
+    {
+      "id": "F11",
+      "kind": "geojson_candidates",
+      "package": "servicio-wms-comunas-de-cali",
+      "candidates": [
+        "https://www.datos.gov.co/resource/dx2g-2mhm.geojson?$limit=100",
+        "https://www.datos.gov.co/api/geospatial/dx2g-2mhm?method=export&format=GeoJSON"
+      ],
+      "override_env": "COMUNAS_GEOJSON_URL",
+      "name": "Comunas de Santiago de Cali (polígonos)",
+      "entity": "Departamento Administrativo de Planeación Municipal (publicado en el portal nacional datos.gov.co)",
+      "periodo": "Vigente",
+      "clean_file": "comunas.geojson",
+      "integrated": true,
+      "_nota": "Las URL candidatas NO se pudieron probar desde el entorno de desarrollo; ingest.py prueba en orden y deja en el manifiesto cuál respondió."
+    }
+  ],
+  "no_entraron": [
+    {
+      "id": "F02",
+      "name": "Lesionados en accidentes de tránsito 2016–2025",
+      "razon": "La descarga directa devolvió 403 a las herramientas automáticas y la ficha no confirma el desglose por comuna; queda como candidata para una versión siguiente."
+    },
+    {
+      "id": "F05",
+      "name": "Posibles víctimas de trata de personas",
+      "razon": "Dato de personas en riesgo. No se descarga ni se publica; ni siquiera agregado, porque los conteos por zona con pocos casos pueden identificar a alguien."
+    },
+    {
+      "id": "F06",
+      "name": "Líderes y lideresas sociales amenazados",
+      "razon": "Dato de personas en riesgo. No se descarga ni se publica."
+    },
+    {
+      "id": "F07",
+      "name": "POT – Suelo de expansión urbana",
+      "razon": "No responde a ninguna de las preguntas del sistema; la capa de comunas (F11) cubre la necesidad territorial."
+    },
+    {
+      "id": "F08",
+      "name": "Vistas mensuales de Wikipedia sobre «Cali»",
+      "razon": "No se pudo probar; además no responde a las preguntas del sistema."
+    },
+    {
+      "id": "F10",
+      "name": "GTFS del MIO (Metro Cali S.A.)",
+      "razon": "No existe (la inventó la IA): no hay feed oficial descargable; solo noticias y un repositorio no oficial."
+    }
+  ],
+  "calidad": {
+    "F01": {
+      "ultimo_anio_confiable": 2018,
+      "razon": "En la fuente el total de la ciudad pasa de 1.170 homicidios en 2018 a 15.647 en 2019, y en las comunas 2 a 22 las cifras de 2019, 2020 y 2021 son múltiplos exactos del número de la comuna. No son creíbles y no se grafican."
+    }
+  }
+}
